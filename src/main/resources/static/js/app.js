@@ -1,7 +1,8 @@
 var Module = (function () {
   var _blueprints;
   var author;
-  var url = "js/apiclient.js";
+  var blueprintName;
+  var url = "js/apimock.js";
 
   const _toObject = function (author, mockdata) {
     _blueprints = [];
@@ -23,7 +24,6 @@ var Module = (function () {
   const _completeTable = function () {
     $(document).ready(function () {
       _blueprints.map(function (bp) {
-        _name = bp.name;
         let fields =
           "<tr><td>" +
           bp.name +
@@ -76,15 +76,16 @@ var Module = (function () {
     $.getScript(url, function () {
       author = $("#authorName").val();
       document.getElementById("lbAuthor").innerHTML = author + " blueprints:";
-      apiclient.getBlueprintsByAuthor(author, _toObject);
+      apimock.getBlueprintsByAuthor(author, _toObject);
     });
   };
 
   const getBlueprintsByNameAndAuthor = function (blueprintName) {
+    blueprintName = blueprintName;
     document.getElementById("lbName").innerHTML =
       "Current Blueprint: " + blueprintName;
     $.getScript(url, function () {
-      apiclient.getBlueprintsByNameAndAuthor(
+      apimock.getBlueprintsByNameAndAuthor(
         blueprintName,
         author,
         _drawInCanvas
@@ -92,8 +93,39 @@ var Module = (function () {
     });
   };
 
+  const addNewPoints = function (event){
+    let blueprintPoints;
+      for (let bp of _blueprints){
+        console.log(bp.name);
+        console.log(blueprintName);
+        if (bp.name == blueprintName){
+          bp.points.push( { x: event.pageX , y: event.pageY});
+          console.log(blueprintPoints);
+          _drawInCanvas(bp.name,bp);
+        }
+      }
+  }
+
   return {
     getBlueprintsByAuthor: getBlueprintsByAuthor,
     getBlueprintsByNameAndAuthor: getBlueprintsByNameAndAuthor,
+    init:function(){
+      var canvas = document.getElementById("myCanvas"); 
+      var context = canvas.getContext("2d");
+
+      if(window.PointerEvent) {
+        canvas.addEventListener("pointerdown", function(event){
+          console.log('x: ' + event.pageX + ', y: ' + event.pageY);
+          canvas.addEventListener("pointerdown", addNewPoints, false);
+          
+        });
+      }
+      else {
+        canvas.addEventListener("mousedown", function(event){
+          console.log('x: ' + event.pageX + ', y: ' + event.pageY);
+          }
+        );
+      }
+    }  
   };
 })();
