@@ -1,11 +1,14 @@
 var Module = (function () {
   var _blueprints;
   var author;
-  var blueprintName;
-  var url = "js/apimock.js";
+  var _blueprintName;
+  var _mockdata;
+  var _newPoints = [];
+  var url = "js/apiclient.js";
 
   const _toObject = function (author, mockdata) {
     _blueprints = [];
+    _mockdata = mockdata;
     mockdata.map(function (bp) {
       _blueprints.push({ name: bp.name, numPoints: bp.points.length });
     });
@@ -44,6 +47,7 @@ var Module = (function () {
     var ctx = c.getContext("2d");
     _cleanCanvas(c, ctx);
     let blueprintPoints = blueprint.points.slice(1, blueprint.points.length);
+    console.log(blueprintPoints);
     let initx = blueprint.points[0].x;
     let inity = blueprint.points[0].y;
     blueprintPoints.forEach((element) => {
@@ -76,16 +80,16 @@ var Module = (function () {
     $.getScript(url, function () {
       author = $("#authorName").val();
       document.getElementById("lbAuthor").innerHTML = author + " blueprints:";
-      apimock.getBlueprintsByAuthor(author, _toObject);
+      apiclient.getBlueprintsByAuthor(author, _toObject);
     });
   };
 
   const getBlueprintsByNameAndAuthor = function (blueprintName) {
-    blueprintName = blueprintName;
+    _blueprintName = blueprintName;
     document.getElementById("lbName").innerHTML =
       "Current Blueprint: " + blueprintName;
     $.getScript(url, function () {
-      apimock.getBlueprintsByNameAndAuthor(
+      apiclient.getBlueprintsByNameAndAuthor(
         blueprintName,
         author,
         _drawInCanvas
@@ -93,39 +97,54 @@ var Module = (function () {
     });
   };
 
-  const addNewPoints = function (event){
-    let blueprintPoints;
-      for (let bp of _blueprints){
-        console.log(bp.name);
-        console.log(blueprintName);
-        if (bp.name == blueprintName){
-          bp.points.push( { x: event.pageX , y: event.pageY});
-          console.log(blueprintPoints);
-          _drawInCanvas(bp.name,bp);
-        }
+  const addNewPoints = function (event) {
+    var canvas = document.getElementById("myCanvas");
+    clientRect = canvas.getBoundingClientRect();
+    if (_blueprintName != null) {
+      _newPoints.push({
+        x: Math.round(event.clientX - clientRect.left),
+        y: Math.round(event.clientY - clientRect.top),
+      });
+      console.log(_newPoints);
+    }
+  };
+
+  const updateBlueprint = function () {
+    var oldBlueprint = _mockdata.find((bp) => bp.name == _blueprintName); //devuelve el valor del primer elemento que cumpla la condición
+    console.log(oldBlueprint);
+
+    _newPoints.forEach((element) => {
+      oldBlueprint.points.push({ x: element.x, y: element.y });
+    });
+    console.log(oldBlueprint);
+    apiclient.updateBlueprint(oldBlueprint, author, _blueprintName).then(
+      function () {
+        getBlueprintsByAuthor();
+        getBlueprintsByNameAndAuthor(_blueprintName);
+      },
+      function () {
+        alert("$.get failed!");
       }
-  }
+    );
+  };
 
   return {
     getBlueprintsByAuthor: getBlueprintsByAuthor,
     getBlueprintsByNameAndAuthor: getBlueprintsByNameAndAuthor,
-    init:function(){
-      var canvas = document.getElementById("myCanvas"); 
-      var context = canvas.getContext("2d");
+    updateBlueprint: updateBlueprint,
+    _cleanCanvas: _cleanCanvas,
+    init: function () {
+      var canvas = document.getElementById("myCanvas");
 
-      if(window.PointerEvent) {
-        canvas.addEventListener("pointerdown", function(event){
-          console.log('x: ' + event.pageX + ', y: ' + event.pageY);
-          canvas.addEventListener("pointerdown", addNewPoints, false);
-          
-        });
-      }
-      else {
-        canvas.addEventListener("mousedown", function(event){
-          console.log('x: ' + event.pageX + ', y: ' + event.pageY);
-          }
+      if (window.PointerEvent) {
+        canvas.addEventListener(
+          "pointerdown",
+          addNewPoints,
+          function (event) {}
         );
+      } else {
+        canvas.addEventListener("mousedown", addNewPoints, function (event) {});
       }
-    }  
+    },
   };
 })();

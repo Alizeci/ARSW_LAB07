@@ -1,36 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <style>
-      table {
-        width: 100%;
-        margin-bottom: 20px;
-        border-collapse: collapse;
-      }
-      table,
-      th,
-      td {
-        border: 1px solid #cdcdcd;
-      }
-      table th,
-      table td {
-        padding: 10px;
-        text-align: left;
-      }
-      canvas.myPanel {
-        margin-left: 100px;
-      }
-      button.mybutton {
-        background-color: #4caf50; /* Green */
-        border: none;
-        color: white;
-        padding: 10px 30px;
-        text-align: center;
-        text-decoration: none;
-        display: inline-block;
-        font-size: 16px;
-      }
-    </style>
     <title>Blueprints</title>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -40,6 +10,7 @@
       rel="stylesheet"
       href="/webjars/bootstrap/4.1.2/css/bootstrap.min.css"
     />
+    <link rel="stylesheet" href="css/app.css" />
     <script src="js/apimock.js"></script>
     <script src="js/app.js"></script>
     <script src="js/apiclient.js"></script>
@@ -94,6 +65,14 @@
             style="border: 1px solid black"
             class="myPanel"
           ></canvas>
+          <button
+            type="button"
+            id="saveBlueprint"
+            onclick="Module.updateBlueprint()"
+            class="mybuttonsave"
+          >
+            Save/Update
+          </button>
         </div>
       </div>
     </div>

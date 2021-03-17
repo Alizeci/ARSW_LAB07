@@ -13,8 +13,19 @@ var apiclient = (function () {
       }
     );
   };
+
+  var updateBlueprint = function (blueprint, author, name) {
+    return $.ajax({
+      url: "http://localhost:8080/blueprints/" + author + "/" + name,
+      type: "PUT",
+      data: JSON.stringify(blueprint),
+      contentType: "application/json",
+    });
+  };
+
   return {
     getBlueprintsByAuthor: getBlueprintsByAuthor,
     getBlueprintsByNameAndAuthor: getBlueprintsByNameAndAuthor,
+    updateBlueprint: updateBlueprint,
   };
 })();
