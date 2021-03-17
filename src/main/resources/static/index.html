@@ -36,7 +36,76 @@
             </p>
           </form>
         </div>
-        <div class="col-lg-5"></div>
+        <div class="col-lg-5">
+          <button
+            type="button"
+            id="createBlueprint"
+            onclick="Module.cleanCanvas()"
+            class="mybuttoncreate"
+            data-toggle="modal"
+            data-target="#exampleModal"
+            data-whatever="@mdo"
+          >
+            Create new blueprint
+          </button>
+          <div
+            class="modal fade"
+            id="exampleModal"
+            tabindex="-1"
+            role="dialog"
+            aria-labelledby="exampleModalLabel"
+            aria-hidden="true"
+          >
+            <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="exampleModalLabel">
+                    New Blueprint
+                  </h5>
+                  <button
+                    type="button"
+                    class="close"
+                    data-dismiss="modal"
+                    aria-label="Close"
+                  >
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                  <form>
+                    <div>
+                      <label for="recipient-name" class="col-form-label"
+                        >New Name:</label
+                      >
+                      <input
+                        type="text"
+                        class="form-control"
+                        id="newBlueprintName"
+                      />
+                    </div>
+                  </form>
+                </div>
+                <div class="modal-footer">
+                  <button
+                    type="button"
+                    class="btn btn-secondary"
+                    data-dismiss="modal"
+                  >
+                    Close
+                  </button>
+                  <button
+                    type="button"
+                    class="btn btn-primary"
+                    onclick="Module.addNewBlueprint()"
+                    data-dismiss="modal"
+                  >
+                    Save Name
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
       <div class="row">
         <div class="col-lg-5">
@@ -57,7 +126,7 @@
           </div>
         </div>
         <div class="col-lg-5">
-          <h2 id="lbName" style="text-align: center">Current Blueprint:</h2>
+          <h4 id="lbName" class="subtitle">Current Blueprint:</h4>
           <canvas
             id="myCanvas"
             width="500"
@@ -65,14 +134,24 @@
             style="border: 1px solid black"
             class="myPanel"
           ></canvas>
-          <button
-            type="button"
-            id="saveBlueprint"
-            onclick="Module.updateBlueprint()"
-            class="mybuttonsave"
-          >
-            Save/Update
-          </button>
+          <div class="btn-group">
+            <button
+              type="button"
+              id="saveBlueprint"
+              onclick="Module.updateBlueprint()"
+              class="mybuttonsave"
+            >
+              Save/Update
+            </button>
+            <button
+              type="button"
+              id="deleteBlueprint"
+              onclick="Module.deleteBlueprint()"
+              class="mybuttondelete"
+            >
+              Delete
+            </button>
+          </div>
         </div>
       </div>
     </div>

@@ -58,4 +58,11 @@ public interface BlueprintsPersistence {
      */
     public Set<Blueprint> getAllBluePrint() throws BlueprintNotFoundException;
 
+    /**
+     * 
+     * @param author el autor del mapa
+     * @param name   el nombre del mapa
+     * @throws BlueprintNotFoundException if there is no such blueprint
+     */
+    public void deleteBlueprintByAuthorAndName(String author, String name) throws BlueprintNotFoundException;
 }

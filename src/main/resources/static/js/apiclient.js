@@ -23,9 +23,27 @@ var apiclient = (function () {
     });
   };
 
+  var addNewBlueprint = function (blueprint) {
+    return $.ajax({
+      url: "http://localhost:8080/blueprints",
+      type: "POST",
+      data: JSON.stringify(blueprint),
+      contentType: "application/json",
+    });
+  };
+
+  var deleteBlueprint = function (author, name) {
+    return $.ajax({
+      url: "http://localhost:8080/blueprints/" + author + "/" + name,
+      type: "DELETE",
+    });
+  };
+
   return {
     getBlueprintsByAuthor: getBlueprintsByAuthor,
     getBlueprintsByNameAndAuthor: getBlueprintsByNameAndAuthor,
     updateBlueprint: updateBlueprint,
+    addNewBlueprint: addNewBlueprint,
+    deleteBlueprint: deleteBlueprint,
   };
 })();

@@ -43,11 +43,10 @@ var Module = (function () {
   };
 
   const _drawInCanvas = function (name, blueprint) {
-    var c = document.getElementById("myCanvas");
-    var ctx = c.getContext("2d");
-    _cleanCanvas(c, ctx);
+    let c = document.getElementById("myCanvas");
+    let ctx = c.getContext("2d");
+    cleanCanvas();
     let blueprintPoints = blueprint.points.slice(1, blueprint.points.length);
-    console.log(blueprintPoints);
     let initx = blueprint.points[0].x;
     let inity = blueprint.points[0].y;
     blueprintPoints.forEach((element) => {
@@ -70,7 +69,9 @@ var Module = (function () {
     document.getElementById("lbTotal").innerHTML = "Total user points: ";
   };
 
-  const _cleanCanvas = function (c, ctx) {
+  const cleanCanvas = function () {
+    let c = document.getElementById("myCanvas");
+    let ctx = c.getContext("2d");
     ctx.clearRect(0, 0, c.width, c.height);
     ctx.beginPath();
   };
@@ -105,25 +106,46 @@ var Module = (function () {
         x: Math.round(event.clientX - clientRect.left),
         y: Math.round(event.clientY - clientRect.top),
       });
-      console.log(_newPoints);
     }
   };
 
   const updateBlueprint = function () {
     var oldBlueprint = _mockdata.find((bp) => bp.name == _blueprintName); //devuelve el valor del primer elemento que cumpla la condición
-    console.log(oldBlueprint);
-
     _newPoints.forEach((element) => {
       oldBlueprint.points.push({ x: element.x, y: element.y });
     });
-    console.log(oldBlueprint);
     apiclient.updateBlueprint(oldBlueprint, author, _blueprintName).then(
       function () {
         getBlueprintsByAuthor();
         getBlueprintsByNameAndAuthor(_blueprintName);
       },
       function () {
-        alert("$.get failed!");
+        alert("failed!");
+      }
+    );
+  };
+
+  const addNewBlueprint = function () {
+    _blueprintName = $("#newBlueprintName").val();
+    var newBlueprint = { author: author, name: _blueprintName, points: [] };
+    apiclient.addNewBlueprint(newBlueprint, author).then(
+      function () {
+        getBlueprintsByAuthor();
+      },
+      function () {
+        alert("failed!");
+      }
+    );
+  };
+
+  const deleteBlueprint = function () {
+    cleanCanvas();
+    apiclient.deleteBlueprint(author, _blueprintName).then(
+      function () {
+        getBlueprintsByAuthor();
+      },
+      function () {
+        alert("failed!");
       }
     );
   };
@@ -132,7 +154,9 @@ var Module = (function () {
     getBlueprintsByAuthor: getBlueprintsByAuthor,
     getBlueprintsByNameAndAuthor: getBlueprintsByNameAndAuthor,
     updateBlueprint: updateBlueprint,
-    _cleanCanvas: _cleanCanvas,
+    cleanCanvas: cleanCanvas,
+    addNewBlueprint: addNewBlueprint,
+    deleteBlueprint: deleteBlueprint,
     init: function () {
       var canvas = document.getElementById("myCanvas");
 

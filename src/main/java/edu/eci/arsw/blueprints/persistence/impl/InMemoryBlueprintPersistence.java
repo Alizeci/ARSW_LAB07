@@ -107,4 +107,12 @@ public class InMemoryBlueprintPersistence implements BlueprintsPersistence {
         }
     }
 
+    @Override
+    public void deleteBlueprintByAuthorAndName(String author, String name) throws BlueprintNotFoundException {
+        for (Map.Entry<Tuple<String, String>, Blueprint> entry : blueprints.entrySet()) {
+            if (entry.getKey().getElem1().equals(author) && entry.getKey().getElem2().equals(name)) {
+                blueprints.remove(entry.getKey());
+            }
+        }
+    }
 }
