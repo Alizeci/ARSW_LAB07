@@ -68,3 +68,4 @@ Es necesario tener instalado **gradle** en el equipo que desee ejecutar la aplic
 	* Haga DELETE del recurso correspondiente.
 	* Haga GET de los planos ahora disponibles.
 
+![](img/blueprintsView.png)
