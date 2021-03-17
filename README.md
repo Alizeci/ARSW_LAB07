@@ -9,7 +9,17 @@
 
 ### Descripción 
 Este laboratorio tiene como fin, actualizar en Front para que se pueda comunicar con los servicios del REST API desarrollado anteriormente
-### Parte I
+### 📍 Parte I
+
+### 💡 Instrucciones para compilar
+
+Es necesario tener instalado **gradle** en el equipo que desee ejecutar la aplicación.
+
+***Para compilar***
+```
+>  gradle build
+>  gradle :bootRun
+```
 
 ![](img/mock2.png)
 
